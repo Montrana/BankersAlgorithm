@@ -21,10 +21,51 @@ namespace BankersAlgorithm
                                   [3, 0, 2],
                                   [2, 1, 1],
                                   [0, 0, 2]];
-        }
-        static bool request(int[] available)
-        {
 
+            int instancesA = 10;
+            int[] resourceA = new int[instancesA];
+
+            int instancesB = 5;
+            int[] resourceB = new int[instancesB];
+
+            int instancesC = 7;
+            int[] resourceC = new int[instancesC];
+        }
+        static bool request(int[] request, int[] need, int[] available, int[] allocation, out int[]? newNeed, out int[]? newAvailable, out int[]? newAllocation, out bool wait)
+        {
+            newNeed = new int[need.Length];
+            newAvailable = new int[available.Length];
+            newAllocation = new int[allocation.Length];
+            for (int i = 0; i < request.Length; i++)
+            {
+                if (request[i] > need[i])
+                {
+                    newNeed = null;
+                    newAvailable = null;
+                    newAllocation = null;
+                    wait = false;
+                    return false;
+                }
+            }
+            for (int i = 0; i < request.Length; i++)
+            {
+                if (request[i] > available[i])
+                {
+                    newNeed = null;
+                    newAvailable = null;
+                    newAllocation = null;
+                    wait = true;
+                    return false;
+                }
+            }
+            for (int i = 0; i < request.Length; i++)
+            {
+                newAvailable[i] = available[i] - request[i];
+                newAllocation[i] = allocation[i] + request[i];
+                newNeed[i] = need[i] - request[i];
+            }
+            wait = false;
+            return true;
         }
         static bool Safety(int[] work, int[] need)
         {
