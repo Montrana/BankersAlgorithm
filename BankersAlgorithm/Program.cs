@@ -10,7 +10,16 @@ namespace BankersAlgorithm
     {
         static void Main(string[] args)
         {
-            int[] available = [3, 3, 2];
+            int[][] available = [[3, 3, 2],
+                                 [3, 3, 2],
+                                 [3, 3, 2],
+                                 [3, 3, 2],
+                                 [3, 3, 2],
+                                 [3, 0, 2],
+                                 [3, 0, 2],
+                                 [3, 0, 0],
+                                 [3, 0, 0],
+                                 [3, 0, 0]];
             int[][] max = [[7, 5, 3],
                            [3, 2, 2],
                            [9, 0, 2],
