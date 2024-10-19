@@ -1,4 +1,4 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿/// https://www.javatpoint.com/bankers-algorithm-in-operating-system
 
 using System;
 using System.Collections.Generic;
@@ -10,7 +10,7 @@ namespace BankersAlgorithm
     {
         static void Main(string[] args)
         {
-            int[][] available = [[3, 3, 2],
+            /*int[][] available = [[3, 3, 2],
                                  [3, 3, 2],
                                  [3, 3, 2],
                                  [3, 3, 2],
@@ -19,7 +19,8 @@ namespace BankersAlgorithm
                                  [3, 0, 2],
                                  [3, 0, 0],
                                  [3, 0, 0],
-                                 [3, 0, 0]];
+                                 [3, 0, 0]];*/
+            int [] available = [3, 3, 2]
             int[][] max = [[7, 5, 3],
                            [3, 2, 2],
                            [9, 0, 2],
@@ -31,63 +32,99 @@ namespace BankersAlgorithm
                                   [2, 1, 1],
                                   [0, 0, 2]];
 
-            int instancesA = 10;
-            int[] resourceA = new int[instancesA];
+            int[][] need = max - allocation;
 
-            int instancesB = 5;
-            int[] resourceB = new int[instancesB];
+            List<int> finished;
 
-            int instancesC = 7;
-            int[] resourceC = new int[instancesC];
+            for (int i = 0; i <= allocation.Length; i++)
+            {
+                int[][] newNeed;
+                int[] newAvailable;
+                int[][] newAllocation;
+                if (Request(i, need[i], need, available, allocation, newNeed, newAvailable, newAllocation))
+                {
+                    if(Safety(newAvailable, newAllocation, allocation.length))
+                    {
+                        need = newNeed;
+                        allocation = newAllocation;
+                        for(int j = 0; j <= available[i].Length; i++)
+                        {
+                            available[i][j] = newAvailable[i][j] + allocation[i][j];
+                        }
+                        finished.add(i);
+                    }
+                }
+            }
+            console.writeline(finished);
         }
-        static bool request(int[] request, int[] need, int[] available, int[] allocation, out int[]? newNeed, out int[]? newAvailable, out int[]? newAllocation, out bool wait)
+        static bool Request(int processID, int[] requested, int[][] need, int[] available, int[][] allocation, out int[][]? newNeed, out int[]? newAvailable, out int[][]? newAllocation)
         {
-            newNeed = new int[need.Length];
+            newNeed = new int[need.Length][need[0].length];
             newAvailable = new int[available.Length];
             newAllocation = new int[allocation.Length];
-            for (int i = 0; i < request.Length; i++)
+
+            //int[] resourceIDs = [-1, -1, -1];
+
+            for (int i = 0; i < requested.Length; i++)
             {
-                if (request[i] > need[i])
+                if (requested[i] > need[processID][i])
                 {
                     newNeed = null;
                     newAvailable = null;
                     newAllocation = null;
-                    wait = false;
                     return false;
                 }
             }
-            for (int i = 0; i < request.Length; i++)
+            for (int i = 0; i < requested.Length; i++)
             {
-                if (request[i] > available[i])
+                if (requested[i] > available[i])
                 {
                     newNeed = null;
                     newAvailable = null;
                     newAllocation = null;
-                    wait = true;
                     return false;
                 }
             }
-            for (int i = 0; i < request.Length; i++)
+            /// If we were not able to find an available resource for one of the requests
+            /*if (resourceIDs[0] == -1 || resourceIDs[1] == -1 || resourceIDs[2] = -1)
             {
-                newAvailable[i] = available[i] - request[i];
-                newAllocation[i] = allocation[i] + request[i];
-                newNeed[i] = need[i] - request[i];
+                newNeed = null;
+                newAvailable = null;
+                newAllocation = null;
+                wait = true;
+                return false;
+            }*/
+            for (int i = 0; i < requested.Length; i++)
+            {
+                newAvailable[i] = available[i] - requested[i];
+
+                newAllocation[processID][i] = allocation[processID][i] + requested[i];
+                newNeed[processID][i] = need[processID][i] - requested[i];
             }
-            wait = false;
             return true;
         }
-        static bool Safety(int[] work, int[] need)
+
+
+        static bool Safety(int[] available, int[][] need, int numProcesses)
         {
-            bool[] finish = new bool[work.Length];
+            int[] work = Available;
+            bool[] finish = new bool[numProcesses];
 
             for (int i = 0; i < finish.Length; i++)
             {
                 finish[i] = false;
             }
-            for (int i = 0; i <= work.Length; i++)
+            for (int i = 0; i <= finish.Length; i++)
             {
-                if (!finish[i] && need[i] <= work[i])
+                if (!finish[i])
                 {
+                    for (int j = 0; j <= work.length; j++)
+                    {
+                        if(need[i][j] > work[j])
+                        {
+                            work[j] = work[j] + allocation[i][j]
+                        }
+                    }
                     finish[i] = true;
                 }
             }
