@@ -72,8 +72,8 @@ namespace BankersAlgorithm
                             {
                                 need = tempNeed;
                                 allocation = tempAllocation;
-                                Console.WriteLine("Available: ");
-                                PrintArray(newAvailable);
+                                /*Console.WriteLine("\nAvailable: ");
+                                PrintArray(newAvailable);*/
 
                                 // When processes complete, their resources need to be made available again
                                 for (int j = 0; j < available.Length; j++)
@@ -96,13 +96,13 @@ namespace BankersAlgorithm
                                 Console.WriteLine("Available: ");
                                 PrintArray(available);
 
-                                finished.Add(i + 1);
+                                finished.Add(i);
                             }
                         }
                     }
                 }
             }
-            Console.WriteLine("<");
+            Console.Write("\n<");
             foreach (int i in finished)
             {
                 Console.Write("P" + i + ", ");
